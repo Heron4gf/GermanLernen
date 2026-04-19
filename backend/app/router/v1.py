@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database.db import get_db, get_cards, get_latest_card
-from models.wordschema import CardResponse
+from backend.app.database.db import get_db, get_cards, get_latest_card
+from backend.app.models.wordschema import CardResponse
 
 router = APIRouter(prefix="/cards", tags=["cards"])
 

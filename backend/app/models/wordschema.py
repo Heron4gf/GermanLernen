@@ -3,7 +3,7 @@ from typing import List, Optional
 from sqlalchemy import ForeignKey, String
 from datetime import datetime
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class WordSchema(BaseModel):
     word: str
@@ -11,7 +11,7 @@ class WordSchema(BaseModel):
 
 class CardSchema(BaseModel):
     title: str
-    words: List[WordSchema]
+    words: List[WordSchema] = Field(..., min_length=5, max_length=10)
 
 class Base(DeclarativeBase):
     pass
