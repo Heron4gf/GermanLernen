@@ -1,6 +1,5 @@
 <template>
   <div>
-    <a href="#main-content" class="sr-only">Skip to content</a>
 
     <header class="app-header">
       <div class="container header-inner">
