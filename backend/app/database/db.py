@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from typing import List, Optional
 from sqlalchemy import create_engine, ForeignKey, String, DateTime, desc
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, sessionmaker, Session
-from models.wordschema import CardSchema
+from backend.app.models.wordschema import CardSchema
 
 DB_URL = os.environ.get("DB_URL")
 engine = create_engine(
