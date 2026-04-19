@@ -1,8 +1,8 @@
 services:
   api:
     build: ./backend
-    networks:
-      - app-net
+    ports:
+      - "8000:8000"
     volumes:
       - sqlite_data:/app/data
     env_file:
@@ -14,15 +14,13 @@ services:
   frontend:
     build:
       context: ./frontend
-    networks:
-      - app-net
+      args:
+        - VITE_API_URL=http://5.75.173.83:8000
+    ports:
+      - "2372:80"
     depends_on:
       - api
     restart: unless-stopped
 
 volumes:
   sqlite_data:
-
-networks:
-  app-net:
-    driver: bridge
