@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import List
+from typing import List, Optional
 from sqlalchemy import ForeignKey, String
+from datetime import datetime
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from pydantic import BaseModel
 
@@ -35,3 +36,20 @@ class Word(Base):
     translation: Mapped[str] = mapped_column(String(255))
     card_id: Mapped[int] = mapped_column(ForeignKey("cards.id"))
     card: Mapped[Card] = relationship(back_populates="words")
+
+class CardResponse(BaseModel):
+    id: str
+    title: Optional[str] = None
+    content: Optional[str] = None
+    createdAt: datetime
+
+    model_config = {"from_attributes": True}
+
+    @classmethod
+    def from_orm_card(cls, card) -> "CardResponse":
+        return cls(
+            id=card.id,
+            title=card.title,
+            content=card.content,
+            createdAt=card.created_at,
+        )
