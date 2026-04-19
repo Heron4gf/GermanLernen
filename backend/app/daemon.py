@@ -9,21 +9,22 @@ logger = logging.getLogger(__name__)
 INTERVAL_SECONDS = 24 * 60 * 60
 
 
-def run_generation(db: Session) -> None:
-    schema = generate_card_schema(db)
-    card = create_card(db, schema)
-    logger.info(f"Created card: {card.id} — {card.title}")
+def run_generation() -> None:
+    db: Session = SessionLocal()
+    try:
+        schema = generate_card_schema(db)
+        card = create_card(db, schema)
+        logger.info(f"Created card: {card.id} — {card.title}")
+    except Exception as e:
+        logger.error(f"Daemon error: {e}", exc_info=True)
+    finally:
+        db.close()
 
 
 async def daemon_loop():
+    # Run immediately on startup, then every 24h
     while True:
-        db: Session = SessionLocal()
-        try:
-            run_generation(db)
-        except Exception as e:
-            logger.error(f"Daemon error: {e}", exc_info=True)
-        finally:
-            db.close()
+        await asyncio.get_event_loop().run_in_executor(None, run_generation)
         await asyncio.sleep(INTERVAL_SECONDS)
 
 
