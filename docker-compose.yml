@@ -9,6 +9,7 @@ services:
       - .env
     environment:
       - DB_URL=sqlite:////app/data/cards.db
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:2372}
     restart: unless-stopped
 
   frontend:
