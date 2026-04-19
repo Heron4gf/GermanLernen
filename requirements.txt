@@ -1,0 +1,6 @@
+python-dotenv
+openai
+fastapi
+univorn[standard]
+pydantic
+sqlalchemy
