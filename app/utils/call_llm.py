@@ -1,31 +1,37 @@
 from pathlib import Path
 from openai import OpenAI
-import os
-from database.db import get_cards
 from sqlalchemy.orm import Session
-from models.wordschema import Card
+from database.db import get_cards
+from models.wordschema import CardSchema
+import os
 
-def readfile(path: str) -> str:
+client = OpenAI()
+
+
+def _read_prompt_template() -> str:
     base = Path(__file__).parent
-    file_path = base / path
-    return file_path.read_text(encoding="utf-8")
+    return (base / "../prompts/prompt.md").read_text(encoding="utf-8")
 
-def format_cards(cards: list[Card]) -> str:
+
+def _format_cards(cards) -> str:
     lines = []
     for card in cards:
         for w in card.words:
             lines.append(f"{w.word}, {w.translation}")
     return "\n".join(lines)
 
-def get_prompt(db: Session) -> str:
-    prompt_text = readfile("../prompts/prompt.md")
-    cards_text = format_cards(get_cards(db))
-    return f"{prompt_text}\n\n{cards_text}"
 
+def generate_card_schema(db: Session) -> CardSchema:
+    system_prompt = _read_prompt_template()
+    existing_words = _format_cards(get_cards(db))
 
-client = OpenAI()
+    response = client.responses.parse(
+        model=os.getenv("MODEL"),
+        input=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": f"Already used words:\n{existing_words}"},
+        ],
+        text_format=CardSchema,
+    )
 
-response = client.responses.create(
-    model=os.getenv("MODEL"),
-    input=get_prompt()
-)
+    return response.output_parsed

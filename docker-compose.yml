@@ -1,0 +1,15 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - sqlite_data:/app/data
+    env_file:
+      - .env
+    environment:
+      - DB_URL=sqlite:////app/data/cards.db
+    restart: unless-stopped
+
+volumes:
+  sqlite_data:
