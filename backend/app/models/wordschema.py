@@ -42,6 +42,7 @@ class CardResponse(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
     createdAt: datetime
+    words: List[WordSchema] = []
 
     model_config = {"from_attributes": True}
 
@@ -52,4 +53,5 @@ class CardResponse(BaseModel):
             title=card.title,
             content=card.content,
             createdAt=card.created_at,
+            words=[WordSchema(word=w.word, translation=w.translation) for w in card.words],
         )
