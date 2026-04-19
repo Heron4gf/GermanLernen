@@ -9,9 +9,8 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useCard } from '../composables/useCard.js'
-import { api } from '../api.js'
 import StudyView from '../components/StudyView.vue'
 
-const { card, loading, error, load } = useCard(api.getLatestCard)
+const { card, loading, error, load } = useCard()
 onMounted(load)
 </script>
