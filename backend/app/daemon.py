@@ -1,8 +1,8 @@
 import asyncio
 import logging
 from sqlalchemy.orm import Session
-from backend.app.database.db import SessionLocal, create_card
-from backend.app.utils.call_llm import generate_card_schema
+from database.db import SessionLocal, create_card
+from utils.call_llm import generate_card_schema
 
 logger = logging.getLogger(__name__)
 

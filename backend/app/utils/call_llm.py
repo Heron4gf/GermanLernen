@@ -1,8 +1,8 @@
 from pathlib import Path
 from openai import OpenAI
 from sqlalchemy.orm import Session
-from backend.app.database.db import get_cards
-from backend.app.models.wordschema import CardSchema
+from database.db import get_cards
+from models.wordschema import CardSchema
 import os
 
 client = OpenAI()
