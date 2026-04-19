@@ -1,31 +1,6 @@
 # GermanLernen
 
-A FastAPI backend that serves German vocabulary cards and runs a background daemon that generates a new card every 24 hours using an LLM.
-
-***
-
-## Project structure
-
-```
-.
-├── app/
-│   ├── main.py              # FastAPI entry point + lifespan daemon start
-│   ├── daemon.py            # 24h background task that calls the LLM
-│   ├── database/
-│   │   └── db.py            # SQLAlchemy models + CRUD helpers
-│   ├── models/
-│   │   └── wordschema.py    # Pydantic schemas (CardSchema, CardResponse)
-│   ├── router/
-│   │   └── v1.py            # /cards and /cards/latest endpoints
-│   ├── utils/
-│   │   └── call_llm.py      # LLM prompt builder
-│   └── prompts/
-│       └── prompt.md        # System prompt sent to the LLM
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-└── .env.example
-```
+A FastAPI backend that serves German vocabulary cards and runs a background daemon that generates a new card every 24 hours using an LLM. A Vue 3 frontend provides daily study (learn + exercise modes) and a history browser.
 
 ***
 
@@ -52,7 +27,7 @@ MODEL="gpt-4o-mini"
 DB_URL="sqlite:///./cards.db"
 ```
 
-> When running via Docker Compose, `DB_URL` is overridden to use the persistent volume path. You do not need to change it for Docker usage.
+> When running via Docker Compose, `DB_URL` is overridden to use the persistent volume path.
 
 ### 2. Run with Docker Compose
 
@@ -60,13 +35,14 @@ DB_URL="sqlite:///./cards.db"
 docker compose up --build
 ```
 
-The API will be available at `http://localhost:8000`.
+- API: `http://localhost:8000`
+- Frontend: `http://localhost:3000`
 
 ### 3. Run locally (without Docker)
 
 ```bash
 pip install -r requirements.txt
-cd app
+cd backend/app
 uvicorn main:app --reload
 ```
 
@@ -150,8 +126,8 @@ The schema is auto-created on startup via `Base.metadata.create_all()`.
 
 ## Environment variables
 
-| Variable         | Description                          | Example                        |
-|------------------|--------------------------------------|--------------------------------|
-| `OPENAI_API_KEY` | Your OpenAI secret key               | `sk-...`                       |
-| `MODEL`          | OpenAI model name                    | `gpt-4o-mini`                  |
-| `DB_URL`         | SQLAlchemy database URL              | `sqlite:///./cards.db`         |
+| Variable         | Description                | Example                |
+|------------------|----------------------------|------------------------|
+| `OPENAI_API_KEY` | Your OpenAI secret key     | `sk-...`               |
+| `MODEL`          | OpenAI model name          | `gpt-4o-mini`          |
+| `DB_URL`         | SQLAlchemy database URL    | `sqlite:///./cards.db` |

@@ -1,6 +1,6 @@
 services:
   api:
-    build: .
+    build: ./backend
     ports:
       - "8000:8000"
     volumes:
@@ -9,6 +9,14 @@ services:
       - .env
     environment:
       - DB_URL=sqlite:////app/data/cards.db
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
     restart: unless-stopped
 
 volumes:
